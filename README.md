@@ -2,9 +2,9 @@
 Build
 ------------------------------------------------------------------------
 Make sure you have Make and GCC installed:
-  sudo apt update
-  sudo apt install make
-  sudo apt install build-essential
+* sudo apt update
+* sudo apt install make
+* sudo apt install build-essential
 
 * Use 'make' to build a debug build
 * Use 'make run' to build and run
