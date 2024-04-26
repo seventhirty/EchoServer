@@ -1,14 +1,19 @@
 ------------------------------------------------------------------------
 Build
 ------------------------------------------------------------------------
+Make sure you have Make and GCC installed:
+  sudo apt update
+  sudo apt install make
+  sudo apt install build-essential
+
 * Use 'make' to build a debug build
-* Use 'make O0_BUILD_MODE=release' to build release mode
-* Use 'make O0_BUILD_MODE=final' to build final mode
 * Use 'make run' to build and run
 * Use 'make clean_all' to clean all build output 
+* Use 'make O0_BUILD_MODE=release' to build release mode
+* Use 'make O0_BUILD_MODE=final' to build final mode
 
-* Quick alternative if make not working (run from src folder): 
-  g++ *.cpp -Wall -Wextra -Wpedantic
+* Quick alternative for a debug build (run from src folder): 
+  g++ *.cpp
 
 ------------------------------------------------------------------------
 Usage
