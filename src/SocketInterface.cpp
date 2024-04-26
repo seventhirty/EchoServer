@@ -45,7 +45,7 @@ namespace SocketInterface
 
   ssize_t Read(int socketFileDescriptor, std::string &out_strResult)
   {
-    // TODO : handle messages with unlimited length
+    // TODO (avelkov): handle messages with unlimited length
     char buffer[CFG_ECHO_SERVER_MAX_CLIENT_MSG_LEN]{};
 
     ssize_t charsReadCount = read(socketFileDescriptor, buffer, sizeof(buffer));

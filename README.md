@@ -1,36 +1,64 @@
+------------------------------------------------------------------------
+Build
+------------------------------------------------------------------------
+* Use 'make' to build a debug build
+* Use 'make O0_BUILD_MODE=release' to build release mode
+* Use 'make O0_BUILD_MODE=final' to build final mode
+* Use 'make run' to build and run
+* Use 'make clean_all' to clean all build output 
 
+* Quick alternative if make not working (run from src folder): 
+  g++ *.cpp -Wall -Wextra -Wpedantic
 
+------------------------------------------------------------------------
+Usage
+------------------------------------------------------------------------
 
+* See EchoServerConfig.hpp for the port (currently it's: 50022)
+* Connect to the server using a TCP client program, for example - telnet
+* Anything sent from clients that starts with '>' is considered an info request
 
-
-
+------------------------------------------------------------------------
 Requirements Specification Questions:
+------------------------------------------------------------------------
 
-* Special formatting for differentiating between info and chat commands
-* Should we count the info command as a message (there is no echo for it, but info printing)
+* What is the build target OS and tech to be used?
+  - Currently we use C++17 and build for Ubunutu, using the sockets posix library and std threads
+
+* Implement Client?
+  - There is no client application. Tested with telnet (Ubuntu & Windows 11)
+
+* Implement application-level protocol?
+  - Currently we do raw echoes and anything that starts with '>' is considered an info request
+  
+* Implement proepr server config (cmd args, cfg file, env vars..)? 
+  - All the config settings are hard-coded currently (including port)
+
+* Should we count the info command as a message
+  - Info request (anything that starts with '>' is considered and info request and not counted as a message)
+
 * Should we report message count for the current user only? And for the current session only?
+  - We are reporting only the message count for each individual user session.
 
-
+------------------------------------------------------------------------
 TODO
-
-* All the settings are hard-coded (including port)
+------------------------------------------------------------------------
 
 * Sending more than CFG_ECHO_SERVER_MAX_CLIENT_MSG_LEN bytes from client results
   in multiple reads, which in turn makes the message counter incorrect (this is
   connected to the way we handle timeouts)
 
 * There is a hard-coded timeout period - clients are disconnected if idle for
-  CFG_ECHO_SERVER_TIMEOUT_SECONDS seconds.
+  CFG_ECHO_SERVER_TIMEOUT_SECONDS seconds. 
+  Active sessions counter for timed-out sessions is updated with a latency (less than the timeout period) 
+
+* Write unit tests and refactor if needed. Integrate mock library. Create a makefile.
 
 * Consider using a thread pool for scalability (or other approaches)
-
 * There is no way to stop the server except killing it.
-
-* There is no client application. Tested with telnet (Ubuntu & Windows 11)
-
-
-
-* After a certain amount of messages 
-
-
-- Use exceptions to make code more readable
+* Fix unused variable warnings in release and final
+* Test with non-newline terminated client requests
+* After a certain amount of messages (unsigned long max), msg sent counter overflows and goes back to 0 
+* Use exceptions to make code more readable?
+* Place comments where needed for clarity
+* Inline small functions?
