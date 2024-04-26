@@ -1,0 +1,13 @@
+{
+  "files.associations": {
+    "*.h": "c",
+    "*.hpp": "cpp",
+    "*.def": "c"
+  },
+  "C_Cpp.files.exclude": {
+    "build/**": true,
+  },
+  "search.exclude": {
+    "build/**": true,
+  },
+}
