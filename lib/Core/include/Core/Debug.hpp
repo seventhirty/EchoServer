@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DEBUG_H
+#define DEBUG_H
 
 #include <cstdlib>
 #include <csignal>
@@ -29,3 +30,6 @@
     }                                                                        \
   } while (false)
 #endif
+
+
+#endif // DEBUG_H

@@ -1,8 +1,8 @@
-#include "ClientConnectionHandler.hpp"
+#include "EchoServer/ClientConnectionHandler.hpp"
+#include "EchoServer/EchoServerConfig.hpp"
 #include "Core/StringFormatUtils.hpp"
 #include "Core/Debug.hpp"
 #include "SocketInterface/SocketInterface.hpp"
-#include "EchoServerConfig.hpp"
 
 ClientConnectionHandler::ClientConnectionHandler(int socketID, ActiveConnectionsCountGetterCallback callback)
     : m_activeConnectionsCountGetterCallback(callback), m_socketID(socketID), m_messagesReceivedCount(0UL)

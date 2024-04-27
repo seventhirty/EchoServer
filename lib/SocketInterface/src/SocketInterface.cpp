@@ -1,12 +1,11 @@
-#include "SocketInterface.hpp"
+#include "SocketInterface/SocketInterface.hpp"
 
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
-
-#include <cerrno>  // errno
-#include <cstring> // std::strerror
+#include <cerrno>
+#include <cstring>
 
 #include "Core/Debug.hpp"
 

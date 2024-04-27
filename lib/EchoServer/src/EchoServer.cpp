@@ -1,11 +1,11 @@
-#include "EchoServer.hpp"
+#include "EchoServer/EchoServer.hpp"
 
 #include <thread>
 
 #include "Core/Debug.hpp"
 #include "SocketInterface/SocketInterface.hpp"
-#include "EchoServerConfig.hpp"
-#include "ClientConnectionHandler.hpp"
+#include "EchoServer/EchoServerConfig.hpp"
+#include "EchoServer/ClientConnectionHandler.hpp"
 
 int EchoServer::InitListeningSocket() const
 {
