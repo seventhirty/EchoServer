@@ -1,8 +1,7 @@
 #pragma once
 
 #include <cstdlib>
-#include <cerrno>  // errno
-#include <cstring> // std::strerror
+#include <csignal>
 
 #ifdef NDEBUG
 #define DEBUG_LOG(...) (void)0
@@ -16,7 +15,6 @@
 #define DEBUG_LOG_ERROR(...) fprintf(stderr, __VA_ARGS__)
 #endif
 
-// TODO (avelkov) : make DEBUG_ASSERT more useful
 #ifdef NDEBUG
 #define DEBUG_ASSERT(condition, ...) ((void)0)
 #else
@@ -27,7 +25,7 @@
     {                                                                        \
       DEBUG_LOG_ERROR("Assertion failed: %s\n" fmt "\nFile: %s\nLine: %d\n", \
                       #condition, ##__VA_ARGS__, __FILE__, __LINE__);        \
-      abort();                                                               \
+      std::raise(SIGINT);                                                    \
     }                                                                        \
   } while (false)
 #endif

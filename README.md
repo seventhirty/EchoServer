@@ -76,5 +76,3 @@ TODO
 * Test with non-newline terminated client requests
 * After a certain amount of messages (unsigned long max), msg sent counter overflows and goes back to 0 
 * Use exceptions to make code more readable?
-* Place comments where needed for clarity
-* Inline small functions?
