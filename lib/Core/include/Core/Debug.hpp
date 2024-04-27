@@ -1,5 +1,4 @@
-#ifndef DEBUG_H
-#define DEBUG_H
+#pragma once
 
 #include <cstdlib>
 #include <csignal>
@@ -29,7 +28,3 @@
       std::raise(SIGINT);                                                    \
     }                                                                        \
   } while (false)
-#endif
-
-
-#endif // DEBUG_H

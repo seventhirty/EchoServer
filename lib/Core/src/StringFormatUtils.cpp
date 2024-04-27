@@ -13,7 +13,7 @@ namespace StringFormatUtils
     result += messagesCountPrefix;
     result += std::to_string(messagesCount);
     result += '\n';
-    
+
     return result;
   }
 }

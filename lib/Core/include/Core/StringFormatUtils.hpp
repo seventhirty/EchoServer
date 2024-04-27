@@ -1,5 +1,4 @@
-#ifndef STRINGFORMATUTILS_H
-#define STRINGFORMATUTILS_H
+#pragma once
 
 #include <string>
 
@@ -10,6 +9,3 @@ namespace StringFormatUtils
                             const std::string &messagesCountPrefix,
                             unsigned long messagesCount);
 }
-
-
-#endif // STRINGFORMATUTILS_H
