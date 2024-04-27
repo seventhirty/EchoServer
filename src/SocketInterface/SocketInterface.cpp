@@ -1,5 +1,4 @@
 #include "SocketInterface.hpp"
-#include "EchoServerConfig.hpp"
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -35,7 +34,10 @@ namespace SocketInterface
   {
     sockaddr_in cli_addr;
     socklen_t clilen = sizeof(cli_addr);
-    return accept(listenSocketFileDescriptor, (struct sockaddr *)&cli_addr, &clilen);
+
+    return accept(listenSocketFileDescriptor,
+                  reinterpret_cast<sockaddr *>(&cli_addr),
+                  &clilen);
   }
 
   int Close(int socketFileDescriptor)
@@ -46,7 +48,7 @@ namespace SocketInterface
   ssize_t Read(int socketFileDescriptor, std::string &out_strResult)
   {
     // TODO (avelkov): handle messages with unlimited length
-    char buffer[CFG_ECHO_SERVER_MAX_CLIENT_MSG_LEN]{};
+    char buffer[256]{};
 
     ssize_t charsReadCount = read(socketFileDescriptor, buffer, sizeof(buffer));
 

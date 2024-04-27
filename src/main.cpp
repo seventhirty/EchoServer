@@ -1,5 +1,5 @@
-#include "EchoServer.hpp"
-#include "Debug.hpp"
+#include "EchoServer/EchoServer.hpp"
+#include "Core/Debug.hpp"
 
 int main()
 {

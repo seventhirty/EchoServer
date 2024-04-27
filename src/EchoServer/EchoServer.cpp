@@ -2,12 +2,13 @@
 
 #include <thread>
 
-#include "Debug.hpp"
-#include "SocketInterface.hpp"
-#include "EchoServerConfig.hpp"
-#include "EchoServerClientConnection.hpp"
+#include "Core/Debug.hpp"
+#include "SocketInterface/SocketInterface.hpp"
 
-int EchoServer::InitListeningSocket()
+#include "EchoServerConfig.hpp"
+#include "ClientConnectionHandler.hpp"
+
+int EchoServer::InitListeningSocket() const
 {
   DEBUG_LOG("EchoServer creating listening socket..\n");
   auto listenSocketFD = SocketInterface::CreateListeningSocket();
@@ -62,7 +63,9 @@ void EchoServer::AcceptNextClientConnection(int listenSocketFD)
 
 void EchoServer::HandleClientConnection(int clientConnectionSocketFD)
 {
-  EchoServerClientConnection newConnection(clientConnectionSocketFD, *this);
+  ClientConnectionHandler newConnection(clientConnectionSocketFD,
+                                        [this]()
+                                        { return GetActiveConnectionsCount(); });
   UpdateActiveConnectionsCount(1);
   newConnection.HandleClientEchoConnection();
   UpdateActiveConnectionsCount(-1);

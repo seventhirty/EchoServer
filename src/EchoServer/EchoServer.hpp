@@ -14,7 +14,7 @@ private:
   EchoServer(const EchoServer &) = delete;
   EchoServer &operator=(const EchoServer &) = delete;
 
-  int InitListeningSocket();
+  int InitListeningSocket() const;
 
   void AcceptNextClientConnection(int listenSocketFD);
   void HandleClientConnection(int clientConnectionSocketFD);
