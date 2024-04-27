@@ -8,7 +8,7 @@
 
 namespace SocketInterface
 {
-  int CreateSocket()
+  int CreateListeningSocket()
   {
     return socket(AF_INET, SOCK_STREAM, 0);
   }

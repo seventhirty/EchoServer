@@ -4,7 +4,7 @@
 
 namespace SocketInterface
 {
-  int CreateSocket();
+  int CreateListeningSocket();
   int BindSocket(int socketFileDescriptor, int portID);
   int ListenSocket(int socketFileDescriptor, int maxPendingConnectionsInQueue);
   int Accept(int listenSocketFileDescriptor);

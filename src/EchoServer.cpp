@@ -10,7 +10,7 @@
 int EchoServer::InitListeningSocket()
 {
   DEBUG_LOG("EchoServer creating listening socket..\n");
-  auto listenSocketFD = SocketInterface::CreateSocket();
+  auto listenSocketFD = SocketInterface::CreateListeningSocket();
   DEBUG_ASSERT(listenSocketFD >= 0, "ERROR opening socket: %s", std::strerror(errno));
 
   DEBUG_LOG("EchoServer binding listening socket..\n");

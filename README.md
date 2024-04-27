@@ -42,14 +42,20 @@ Requirements Specification Questions:
 * Implement application-level protocol?
   - Currently we do raw echoes and anything that starts with '>' is considered an info request
   
-* Implement proepr server config (cmd args, cfg file, env vars..)? 
-  - All the config settings are hard-coded currently (including port)
+* Implement proper server config (cmd args, cfg file, env vars..)? 
+  - All the config settings are hard-coded currently (including port) in a single hearder file.
 
 * Should we count the info command as a message
-  - Info request (anything that starts with '>' is considered and info request and not counted as a message)
+  - Info request (anything that starts with '>') is not counted as a message
 
 * Should we report message count for the current user only? And for the current session only?
   - We are reporting only the message count for each individual user session.
+
+* What encoding should be supported?
+  - Currently it's ANSI only
+
+* Should IPv6 be supported?
+  - Currently it's not supported
 
 ------------------------------------------------------------------------
 TODO
