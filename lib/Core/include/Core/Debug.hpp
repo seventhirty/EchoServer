@@ -28,3 +28,4 @@
       std::raise(SIGINT);                                                    \
     }                                                                        \
   } while (false)
+#endif
