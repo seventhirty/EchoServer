@@ -2,10 +2,11 @@
 Build
 ------------------------------------------------------------------------
 Make sure you have Make and GCC installed:
+
 ```
 sudo apt update
-sudo apt install make
 sudo apt install build-essential
+sudo apt install cmake
 ```
 
 * Use 'make' to build a debug build
