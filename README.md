@@ -9,16 +9,26 @@ sudo apt install build-essential
 sudo apt install cmake
 ```
 
-Building Debug:
+Building Debug from the root dir:
 ```
 cmake -S . -B build/debug/ -D CMAKE_BUILD_TYPE=Debug
 cmake --build build/debug/
 ```
 
-Building Release:
+Running Debug tests from the root dir:
+```
+ctest --test-dir build/debug
+```
+
+Building Release from the root dir:
 ```
 cmake -S . -B build/release/ -D CMAKE_BUILD_TYPE=Release
 cmake --build build/release/
+```
+
+Running Release tests from the root dir:
+```
+ctest --test-dir build/release
 ```
 
 ------------------------------------------------------------------------
