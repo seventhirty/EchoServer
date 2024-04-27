@@ -9,14 +9,17 @@ sudo apt install build-essential
 sudo apt install cmake
 ```
 
-* Use 'make' to build a debug build
-* Use 'make run' to build and run
-* Use 'make clean_all' to clean all build output 
-* Use 'make O0_BUILD_MODE=release' to build release mode
-* Use 'make O0_BUILD_MODE=final' to build final mode
+Building Debug:
+```
+cmake -S . -B build/debug/ -D CMAKE_BUILD_TYPE=Debug
+cmake --build build/debug/
+```
 
-* Quick alternative for a debug build (run from src folder): 
-  g++ *.cpp
+Building Release:
+```
+cmake -S . -B build/release/ -D CMAKE_BUILD_TYPE=Release
+cmake --build build/release/
+```
 
 ------------------------------------------------------------------------
 Usage
@@ -64,7 +67,6 @@ TODO
 
 * Consider using a thread pool for scalability (or other approaches)
 * There is no way to stop the server except killing it.
-* Fix unused variable warnings in release and final
 * Test with non-newline terminated client requests
 * After a certain amount of messages (unsigned long max), msg sent counter overflows and goes back to 0 
 * Use exceptions to make code more readable?

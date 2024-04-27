@@ -14,12 +14,12 @@ int EchoServer::InitListeningSocket()
   DEBUG_ASSERT(listenSocketFD >= 0, "ERROR opening socket: %s", std::strerror(errno));
 
   DEBUG_LOG("EchoServer binding listening socket..\n");
-  auto bindRes = SocketInterface::BindSocket(listenSocketFD, CFG_ECHO_SERVER_PORT);
-  DEBUG_ASSERT(bindRes >= 0, "ERROR on binding: %s", std::strerror(errno));
+  DEBUG_ASSERT(SocketInterface::BindSocket(listenSocketFD, CFG_ECHO_SERVER_PORT) >= 0,
+               "ERROR on binding: %s", std::strerror(errno));
 
   DEBUG_LOG("EchoServer preparing to accept connections (listen)..\n");
-  auto listenRes = SocketInterface::ListenSocket(listenSocketFD, CFG_ECHO_SERVER_MAX_PENDING_CLIENT_CONNECTIONS_IN);
-  DEBUG_ASSERT(listenRes >= 0, "ERROR on listen: %s", std::strerror(errno));
+  DEBUG_ASSERT(SocketInterface::ListenSocket(listenSocketFD, CFG_ECHO_SERVER_MAX_PENDING_CLIENT_CONNECTIONS_IN) >= 0,
+               "ERROR on listen: %s", std::strerror(errno));
 
   DEBUG_LOG("EchoServer successfully initialized listening socket..\n");
   return listenSocketFD;
@@ -38,8 +38,7 @@ int EchoServer::Run()
   }
 
   DEBUG_LOG("EchoServer closing listening socket..\n");
-  auto closeRes = SocketInterface::Close(listenSocketFD);
-  DEBUG_ASSERT(closeRes >= 0, "EchoServer::Run: ERROR on closing listening socket: %s", std::strerror(errno));
+  DEBUG_ASSERT(SocketInterface::Close(listenSocketFD) >= 0, "EchoServer::Run: ERROR on closing listening socket: %s", std::strerror(errno));
 
   DEBUG_LOG("EchoServer successful shutdown.\n");
   return EXIT_SUCCESS;
