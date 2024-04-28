@@ -35,7 +35,7 @@ ctest --test-dir build/release
 Usage
 ------------------------------------------------------------------------
 
-* See EchoServerConfig.hpp for the port (currently it's: 50022)
+* See EchoServerConfig.hpp for the port (currently it's: 50025)
 * Connect to the server using a TCP client program, for example - telnet
 * Anything sent from clients that starts with '>' is considered an info request
 
@@ -71,18 +71,12 @@ Requirements Specification Questions:
 TODO
 ------------------------------------------------------------------------
 
-* Sending more than CFG_ECHO_SERVER_MAX_CLIENT_MSG_LEN bytes from client results
-  in multiple reads, which in turn makes the message counter incorrect (this is
-  connected to the way we handle timeouts)
-
 * There is a hard-coded timeout period - clients are disconnected if idle for
   CFG_ECHO_SERVER_TIMEOUT_SECONDS seconds. 
-  Active sessions counter for timed-out sessions is updated with a latency (less than the timeout period) 
+  Active sessions counter for timed-out sessions is updated with a latency equal
+  to the timeout period in the worst case. 
 
-* Write unit tests and refactor if needed. Integrate mock library. Create a makefile.
-
-* Consider using a thread pool for scalability (or other approaches)
+* Don't use a separate thread per client connection (does not scale well)
 * There is no way to stop the server except killing it.
-* Test with non-newline terminated client requests
 * After a certain amount of messages (unsigned long max), msg sent counter overflows and goes back to 0 
 * Use exceptions to make code more readable?

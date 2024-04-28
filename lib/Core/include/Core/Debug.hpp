@@ -6,7 +6,7 @@
 #ifdef NDEBUG
 #define DEBUG_LOG(...) (void)0
 #else
-#define DEBUG_LOG(...) fprintf(stdout, __VA_ARGS__)
+#define DEBUG_LOG(...) fprintf(stderr, __VA_ARGS__)
 #endif
 
 #ifdef NDEBUG

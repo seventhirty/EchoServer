@@ -14,7 +14,7 @@ set(CC_COMPILE_RELEASE_OPTIONS "${CC_COMMON_COMPILE_OPTIONS}" "-O3" "-DNDEBUG")
 target_compile_options(${PROJECT_NAME} PUBLIC "$<$<CONFIG:Debug>:${CC_COMPILE_DEBUG_OPTIONS}>")
 target_compile_options(${PROJECT_NAME} PUBLIC "$<$<CONFIG:Release>:${CC_COMPILE_RELEASE_OPTIONS}>")
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Core EchoServer SocketInterface)
+target_link_libraries(${PROJECT_NAME} PRIVATE Core EchoServer NetworkService)
 
 
 

@@ -2,17 +2,24 @@
 #include "EchoServer/EchoServerConfig.hpp"
 #include "Core/StringFormatUtils.hpp"
 #include "Core/Debug.hpp"
-#include "SocketInterface/SocketInterface.hpp"
+#include "NetworkService/NetworkService.hpp"
 
-ClientConnectionHandler::ClientConnectionHandler(int socketID, ActiveConnectionsCountGetterCallback callback)
-    : m_activeConnectionsCountGetterCallback(callback), m_socketID(socketID), m_messagesReceivedCount(0UL)
+#include <algorithm>
+
+ClientConnectionHandler::ClientConnectionHandler(int socketID,
+                                                 ActiveConnectionsCountGetterCallback activeConnectionsCountGetterCallback,
+                                                 ReadCallback readCallback,
+                                                 WriteCallback writeCallback)
+    : m_socketID(socketID)
+    , m_activeConnectionsCountGetterCallback(activeConnectionsCountGetterCallback)
+    , m_readCallback(readCallback)
+    , m_writeCallback(writeCallback)
+    , m_messagesReceivedCount(0UL)
 {
 }
 
 void ClientConnectionHandler::HandleClientEchoConnection()
 {
-  SocketInterface::SetupConnectionTimeout(m_socketID, CFG_ECHO_SERVER_TIMEOUT_SECONDS);
-
   while (true)
   {
     std::string clientMsg;
@@ -27,7 +34,7 @@ void ClientConnectionHandler::HandleClientEchoConnection()
     }
     else
     {
-      ++m_messagesReceivedCount;
+      m_messagesReceivedCount += std::count(clientMsg.begin(), clientMsg.end(), '\n');
 
       if (!WriteEchoMessageToClient(clientMsg))
         break;
@@ -42,7 +49,7 @@ bool ClientConnectionHandler::IsClientMessageInfoRequest(const std::string &msg)
 
 bool ClientConnectionHandler::ReadClientMessage(std::string &out_Msg) const
 {
-  auto readResult = SocketInterface::Read(m_socketID, out_Msg);
+  auto readResult = m_readCallback(m_socketID, out_Msg);
   if (readResult == 0)
   {
     DEBUG_LOG("ClientConnectionHandler: Client disconnected.\n");
@@ -55,8 +62,7 @@ bool ClientConnectionHandler::WriteInfoMessageToClient() const
 {
   DEBUG_LOG("ClientConnectionHandler: client requested info\n");
 
-  return SocketInterface::Write(
-             m_socketID,
+  return m_writeCallback(m_socketID,
              StringFormatUtils::FormatInfoStr(CFG_ECHO_SERVER_INFO_CMD_STR_CONNECTIONS_COUNT,
                                               m_activeConnectionsCountGetterCallback(),
                                               CFG_ECHO_SERVER_INFO_CMD_STR_MSGS_COUNT,
@@ -66,5 +72,5 @@ bool ClientConnectionHandler::WriteInfoMessageToClient() const
 bool ClientConnectionHandler::WriteEchoMessageToClient(const std::string &clientMsg) const
 {
   DEBUG_LOG("ClientConnectionHandler: writing echo to client\n");
-  return SocketInterface::Write(m_socketID, clientMsg) >= 0;
+  return m_writeCallback(m_socketID, clientMsg) >= 0;
 }

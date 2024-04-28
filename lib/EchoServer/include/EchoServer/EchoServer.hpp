@@ -2,10 +2,12 @@
 
 #include <mutex>
 
+#include "NetworkService/NetworkService.hpp" // TODO : interface param
+
 class EchoServer
 {
 public:
-  EchoServer() = default;
+  EchoServer();
 
   int Run();
   int GetActiveConnectionsCount();
@@ -20,6 +22,8 @@ private:
   void HandleClientConnection(int clientConnectionSocketFD);
 
   void UpdateActiveConnectionsCount(int delta);
+
+  NetworkService m_networkService;
 
   int m_activeConnectionsCount = 0;
   std::mutex m_activeConnectionsCountMutex;

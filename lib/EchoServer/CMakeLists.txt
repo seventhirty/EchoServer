@@ -15,4 +15,4 @@ target_compile_options(${PROJECT_NAME} PUBLIC "$<$<CONFIG:Release>:${CC_COMPILE_
 target_include_directories(Core PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 target_link_libraries(EchoServer PRIVATE Core)
-target_link_libraries(EchoServer PRIVATE SocketInterface)
+target_link_libraries(EchoServer PRIVATE NetworkService)
