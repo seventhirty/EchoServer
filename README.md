@@ -35,7 +35,7 @@ ctest --test-dir build/release
 Usage
 ------------------------------------------------------------------------
 
-* See EchoServerConfig.hpp for the port (currently it's: 50025)
+* See EchoServerConfig.hpp for the port (currently it's: 50026)
 * Connect to the server using a TCP client program, for example - telnet
 * Anything sent from clients that starts with '>' is considered an info request
 
@@ -71,12 +71,16 @@ Requirements Specification Questions:
 TODO
 ------------------------------------------------------------------------
 
+* Implement proper shutdown - handle signals and release thread resources, close sockets
+
 * There is a hard-coded timeout period - clients are disconnected if idle for
   CFG_ECHO_SERVER_TIMEOUT_SECONDS seconds. 
   Active sessions counter for timed-out sessions is updated with a latency equal
-  to the timeout period in the worst case. 
+  to this timeout period in the worst case. 
 
 * Don't use a separate thread per client connection (does not scale well)
-* There is no way to stop the server except killing it.
+
+* Refactor ClientConnectionHandler and EchoServer iceberg classes to be more easily testable and write unit tests
+
 * After a certain amount of messages (unsigned long max), msg sent counter overflows and goes back to 0 
 * Use exceptions to make code more readable?

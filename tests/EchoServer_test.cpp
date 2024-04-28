@@ -40,21 +40,3 @@ TEST(EchoServer_Test, EchoServer_Run_Error_InitListeningSocket)
   EXPECT_EQ(s.GetActiveConnectionsCount(), 0);
   EXPECT_EQ(s.Run(), EXIT_FAILURE);
 }
-
-// int EchoServer::Run()
-// {
-//   DEBUG_LOG("EchoServer starting..\n");
-
-//   auto listenSocketFD = InitListeningSocket();
-
-//   if (listenSocketFD < 0)
-//     return EXIT_FAILURE;
-
-//   // TODO (avelkov): end loop condition isRunning and a way to stop server (and free port on kill)
-//   while (true)
-//     AcceptNextClientConnection(listenSocketFD);
-
-//   DEBUG_LOG("EchoServer closing listening socket..\n");
-
-//   return (m_networkService->Close(listenSocketFD) >= 0 ? EXIT_SUCCESS : EXIT_FAILURE);
-// }

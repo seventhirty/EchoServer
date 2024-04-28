@@ -15,7 +15,7 @@ public:
                           ReadCallback readCallback,
                           WriteCallback writeCallback);
 
-  void HandleClientEchoConnection();
+  void HandleClientConnection();
 
 private:
   ClientConnectionHandler(const ClientConnectionHandler &) = delete;
@@ -30,10 +30,9 @@ private:
   bool WriteEchoMessageToClient(const std::string &clientMsg) const;
 
   int m_socketID;
+  unsigned long m_messagesReceivedCount;
 
   ActiveConnectionsCountGetterCallback m_activeConnectionsCountGetterCallback;
   ReadCallback m_readCallback;
   WriteCallback m_writeCallback;
-
-  unsigned long m_messagesReceivedCount;
 };

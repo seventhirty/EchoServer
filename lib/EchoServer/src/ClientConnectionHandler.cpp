@@ -11,14 +11,14 @@ ClientConnectionHandler::ClientConnectionHandler(int socketID,
                                                  ReadCallback readCallback,
                                                  WriteCallback writeCallback)
     : m_socketID(socketID)
+    , m_messagesReceivedCount(0UL)
     , m_activeConnectionsCountGetterCallback(activeConnectionsCountGetterCallback)
     , m_readCallback(readCallback)
     , m_writeCallback(writeCallback)
-    , m_messagesReceivedCount(0UL)
 {
 }
 
-void ClientConnectionHandler::HandleClientEchoConnection()
+void ClientConnectionHandler::HandleClientConnection()
 {
   std::string unprocessedLeftoverBytes;
 
@@ -102,10 +102,10 @@ bool ClientConnectionHandler::WriteInfoMessageToClient() const
   DEBUG_LOG("ClientConnectionHandler: client requested info\n");
 
   return m_writeCallback(m_socketID,
-             StringFormatUtils::FormatInfoStr(CFG_ECHO_SERVER_INFO_CMD_STR_CONNECTIONS_COUNT,
-                                              m_activeConnectionsCountGetterCallback(),
-                                              CFG_ECHO_SERVER_INFO_CMD_STR_MSGS_COUNT,
-                                              m_messagesReceivedCount)) >= 0;
+    StringFormatUtils::FormatInfoStr(CFG_ECHO_SERVER_INFO_CMD_STR_CONNECTIONS_COUNT,
+                                    m_activeConnectionsCountGetterCallback(),
+                                    CFG_ECHO_SERVER_INFO_CMD_STR_MSGS_COUNT,
+                                    m_messagesReceivedCount)) >= 0;
 }
 
 bool ClientConnectionHandler::WriteEchoMessageToClient(const std::string &clientMsg) const

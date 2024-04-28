@@ -52,14 +52,16 @@ void EchoServer::AcceptNextClientConnection(int listenSocketFD)
 
   DEBUG_LOG("EchoServer: new client connected. Socket ID: %d\n", clientConnectionSocketFD);
 
+  m_networkService->SetupConnectionTimeout(clientConnectionSocketFD, CFG_ECHO_SERVER_TIMEOUT_SECONDS);
+
+  // TODO : handle lifetime issues (error on close, open sockets in timeout upon kill)
+  // intercept system signals, make threads check if it's time to finish?
   std::thread clientThread(&EchoServer::HandleClientConnection, this, clientConnectionSocketFD);
-  clientThread.detach(); // TODO : check for lifetime issues (error on close)
+  clientThread.detach(); 
 }
 
 void EchoServer::HandleClientConnection(int clientConnectionSocketFD)
 {
-  m_networkService->SetupConnectionTimeout(clientConnectionSocketFD, CFG_ECHO_SERVER_TIMEOUT_SECONDS);
-
   auto getActiveConnectionsCountCallback = [this]() { return GetActiveConnectionsCount(); };
 
   auto readNextBytesCallback =
@@ -80,7 +82,7 @@ void EchoServer::HandleClientConnection(int clientConnectionSocketFD)
                                         writeCallback);
 
   UpdateActiveConnectionsCount(1);
-  newConnection.HandleClientEchoConnection();
+  newConnection.HandleClientConnection();
   UpdateActiveConnectionsCount(-1);
 
   DEBUG_LOG("EchoServer: client disconnected. Closing socket %d\n", clientConnectionSocketFD);
