@@ -77,7 +77,7 @@ ssize_t NetworkService::ReadNextBytes(int socketFileDescriptor, std::string &out
 
   out_strResult.clear();
 
-  constexpr size_t readBuffSize = 256;
+  constexpr size_t readBuffSize = 8;
   char buffer[readBuffSize]{};
 
   ssize_t charsReadCount = m_socketInterface->Read(socketFileDescriptor, buffer, readBuffSize);

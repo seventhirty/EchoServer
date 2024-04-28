@@ -20,26 +20,65 @@ ClientConnectionHandler::ClientConnectionHandler(int socketID,
 
 void ClientConnectionHandler::HandleClientEchoConnection()
 {
+  std::string unprocessedLeftoverBytes;
+
   while (true)
   {
-    std::string clientMsg;
+    std::string receivedBytes;
 
-    if (!ReadClientMessage(clientMsg))
+    if (!ReadNextBytesFromClient(receivedBytes))
       break;
 
-    if (IsClientMessageInfoRequest(clientMsg))
+    if (!ProcessReceivedBytes(receivedBytes, unprocessedLeftoverBytes))
+      break;
+  }
+}
+
+bool ClientConnectionHandler::ProcessReceivedBytes(const std::string &bytes, std::string &unprocessedLeftoverBytes)
+{
+  auto end = bytes.cend();
+  auto nextLineStart = bytes.cbegin();
+
+  while (nextLineStart != end)
+  {
+    auto newLineIter = std::find(nextLineStart, end, '\n');
+
+    if (newLineIter != end)
     {
-      if (!WriteInfoMessageToClient())
-        break;
+      // newline found in current sequence,
+      // append and clear any leftovers from previous calls, and process the full message
+      std::string fullMessage(unprocessedLeftoverBytes);
+      unprocessedLeftoverBytes.clear();
+
+      fullMessage.append(nextLineStart, ++newLineIter);
+
+      if (!ProcessClientMessage(fullMessage))
+        return false;
+
+      nextLineStart = newLineIter;
     }
     else
     {
-      m_messagesReceivedCount += std::count(clientMsg.begin(), clientMsg.end(), '\n');
-
-      if (!WriteEchoMessageToClient(clientMsg))
-        break;
+      // no newline found in current sequence, 
+      // save contents as unprocessed leftovers for next time around
+      unprocessedLeftoverBytes.append(nextLineStart, end);
+      break;
     }
   }
+
+  return true;
+}
+
+bool ClientConnectionHandler::ProcessClientMessage(const std::string &msg)
+{
+  if (IsClientMessageInfoRequest(msg))
+  {
+    return WriteInfoMessageToClient();
+  }
+
+  ++m_messagesReceivedCount;
+
+  return WriteEchoMessageToClient(msg);
 }
 
 bool ClientConnectionHandler::IsClientMessageInfoRequest(const std::string &msg) const
@@ -47,7 +86,7 @@ bool ClientConnectionHandler::IsClientMessageInfoRequest(const std::string &msg)
   return !msg.empty() && (msg[0] == CFG_ECHO_SERVER_INFO_CMD_STR_PREFIX);
 }
 
-bool ClientConnectionHandler::ReadClientMessage(std::string &out_Msg) const
+bool ClientConnectionHandler::ReadNextBytesFromClient(std::string &out_Msg) const
 {
   auto readResult = m_readCallback(m_socketID, out_Msg);
   if (readResult == 0)

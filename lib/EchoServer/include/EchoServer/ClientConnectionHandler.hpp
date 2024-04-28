@@ -21,8 +21,11 @@ private:
   ClientConnectionHandler(const ClientConnectionHandler &) = delete;
   ClientConnectionHandler &operator=(const ClientConnectionHandler &) = delete;
 
+  bool ProcessReceivedBytes(const std::string &bytes, std::string &unprocessedLeftoverBytes);
+  bool ProcessClientMessage(const std::string &msg);
+
   bool IsClientMessageInfoRequest(const std::string &msg) const;
-  bool ReadClientMessage(std::string &out_Msg) const; // TODO Rename
+  bool ReadNextBytesFromClient(std::string &out_Msg) const;
   bool WriteInfoMessageToClient() const;
   bool WriteEchoMessageToClient(const std::string &clientMsg) const;
 

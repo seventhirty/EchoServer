@@ -1,4 +1,6 @@
 #include "EchoServer/EchoServer.hpp"
+#include "NetworkService/NetworkService.hpp"
+#include "NetworkService/LinuxSocketInterface.hpp"
 #include "Core/Debug.hpp"
 
 int main()
@@ -6,7 +8,10 @@ int main()
   int result = EXIT_SUCCESS;
   try
   {
-    EchoServer server;
+    auto socketInterfacePtr{std::make_unique<LinuxSocketInterface>()};
+    auto networkServicePtr{std::make_unique<NetworkService>(std::move(socketInterfacePtr))};
+    EchoServer server{std::move(networkServicePtr)};
+    
     result = server.Run();
   }
   catch (const std::exception &e)

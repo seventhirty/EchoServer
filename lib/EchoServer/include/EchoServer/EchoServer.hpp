@@ -1,13 +1,14 @@
 #pragma once
 
 #include <mutex>
+#include <memory>
 
-#include "NetworkService/NetworkService.hpp" // TODO : interface param
+#include "NetworkService/INetworkService.hpp"
 
 class EchoServer
 {
 public:
-  EchoServer();
+  explicit EchoServer(std::unique_ptr<INetworkService> networkService);
 
   int Run();
   int GetActiveConnectionsCount();
@@ -23,8 +24,7 @@ private:
 
   void UpdateActiveConnectionsCount(int delta);
 
-  NetworkService m_networkService;
-
-  int m_activeConnectionsCount = 0;
+  std::unique_ptr<INetworkService> m_networkService;
+  int m_activeConnectionsCount;
   std::mutex m_activeConnectionsCountMutex;
 };
