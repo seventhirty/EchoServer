@@ -17,6 +17,9 @@ public:
   ssize_t Write(int socketFileDescriptor, const std::string &str) const override;
   int SetupConnectionTimeout(int socketFileDescriptor, time_t timeoutSeconds) const override;
 
-protected:
+private:
+  NetworkService(const NetworkService &) = delete;
+  NetworkService &operator=(const NetworkService &) = delete;
+
   std::unique_ptr<ISocketInterface> m_socketInterface;
 };

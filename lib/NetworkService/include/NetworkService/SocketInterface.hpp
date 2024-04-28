@@ -2,7 +2,7 @@
 
 #include "NetworkService/ISocketInterface.hpp"
 
-class LinuxSocketInterface : public ISocketInterface
+class SocketInterface : public ISocketInterface
 {
 public:
   inline int CreateSocket(int domain, int type, int protocol) const override;
@@ -16,43 +16,43 @@ public:
                            int optionName, const void *optionValue, socklen_t optionLen) const override;
 };
 
-int LinuxSocketInterface::CreateSocket(int domain, int type, int protocol) const
+int SocketInterface::CreateSocket(int domain, int type, int protocol) const
 {
   return socket(domain, type, protocol);
 }
 
-int LinuxSocketInterface::Bind(int socketFD, const sockaddr *socketAddress, socklen_t addrlen) const
+int SocketInterface::Bind(int socketFD, const sockaddr *socketAddress, socklen_t addrlen) const
 {
   return bind(socketFD, socketAddress, addrlen);
 }
 
-int LinuxSocketInterface::Listen(int socketFD, int maxPendingConnectionsCount) const
+int SocketInterface::Listen(int socketFD, int maxPendingConnectionsCount) const
 {
   return listen(socketFD, maxPendingConnectionsCount);
 }
 
-int LinuxSocketInterface::Accept(int socketFD, sockaddr *out_socketAddress, socklen_t *out_addrLen) const
+int SocketInterface::Accept(int socketFD, sockaddr *out_socketAddress, socklen_t *out_addrLen) const
 {
   return accept(socketFD, out_socketAddress, out_addrLen);
 }
 
-int LinuxSocketInterface::Close(int socketFD) const
+int SocketInterface::Close(int socketFD) const
 {
   return close(socketFD);
 }
 
-ssize_t LinuxSocketInterface::Read(int socketFD, void *buffer, size_t nBytes) const
+ssize_t SocketInterface::Read(int socketFD, void *buffer, size_t nBytes) const
 {
   return read(socketFD, buffer, nBytes);
 }
 
-ssize_t LinuxSocketInterface::Write(int socketFD, const void *buffer, size_t nBytes) const
+ssize_t SocketInterface::Write(int socketFD, const void *buffer, size_t nBytes) const
 {
   return write(socketFD, buffer, nBytes);
 }
 
-ssize_t LinuxSocketInterface::SetOption(int socketFD, int protocolLevel,
-                                        int optionName, const void *optionValue, socklen_t optionLen) const
+ssize_t SocketInterface::SetOption(int socketFD, int protocolLevel, int optionName, 
+                                   const void *optionValue, socklen_t optionLen) const
 {
   return setsockopt(socketFD, protocolLevel, optionName, optionValue, optionLen);
 }

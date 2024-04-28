@@ -4,7 +4,7 @@
 
 #include "Core/Debug.hpp"
 #include "NetworkService/NetworkService.hpp"
-#include "NetworkService/LinuxSocketInterface.hpp"
+#include "NetworkService/SocketInterface.hpp"
 #include "EchoServer/EchoServerConfig.hpp"
 #include "EchoServer/ClientConnectionHandler.hpp"
 
@@ -50,7 +50,7 @@ void EchoServer::AcceptNextClientConnection(int listenSocketFD)
   if (clientConnectionSocketFD < 0)
     return;
 
-  DEBUG_LOG("EchoServer: new client connected. Socket ID: %d\n", clientConnectionSocketFD);
+  DEBUG_LOG("EchoServer: Client connected. Socket ID: %d\n", clientConnectionSocketFD);
 
   m_networkService->SetupConnectionTimeout(clientConnectionSocketFD, CFG_ECHO_SERVER_TIMEOUT_SECONDS);
 
@@ -85,7 +85,7 @@ void EchoServer::HandleClientConnection(int clientConnectionSocketFD)
   newConnection.HandleClientConnection();
   UpdateActiveConnectionsCount(-1);
 
-  DEBUG_LOG("EchoServer: client disconnected. Closing socket %d\n", clientConnectionSocketFD);
+  DEBUG_LOG("EchoServer: Client disconnected. Closing socket %d\n", clientConnectionSocketFD);
   m_networkService->Close(clientConnectionSocketFD);
 }
 

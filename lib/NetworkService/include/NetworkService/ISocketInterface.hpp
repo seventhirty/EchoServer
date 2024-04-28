@@ -1,6 +1,5 @@
 #pragma once
 
-// TODO : custom types or rename class to ILinuxSocketInterface
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>

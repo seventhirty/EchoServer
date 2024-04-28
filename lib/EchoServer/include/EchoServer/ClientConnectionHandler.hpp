@@ -23,7 +23,6 @@ private:
 
   bool ProcessReceivedBytes(const std::string &bytes, std::string &unprocessedLeftoverBytes);
   bool ProcessClientMessage(const std::string &msg);
-
   bool IsClientMessageInfoRequest(const std::string &msg) const;
   bool ReadNextBytesFromClient(std::string &out_Msg) const;
   bool WriteInfoMessageToClient() const;
@@ -31,7 +30,6 @@ private:
 
   int m_socketID;
   unsigned long m_messagesReceivedCount;
-
   ActiveConnectionsCountGetterCallback m_activeConnectionsCountGetterCallback;
   ReadCallback m_readCallback;
   WriteCallback m_writeCallback;

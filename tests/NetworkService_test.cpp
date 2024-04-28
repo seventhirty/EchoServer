@@ -4,7 +4,7 @@
 #include "NetworkService/NetworkService.hpp"
 #include "NetworkService/ISocketInterface.hpp"
 
-class MockLinuxSocketInterface : public ISocketInterface
+class MockSocketInterface : public ISocketInterface
 {
 public:
   MOCK_METHOD(int, CreateSocket, (int domain, int type, int protocol), (const override));
@@ -17,9 +17,13 @@ public:
   MOCK_METHOD(ssize_t, SetOption, (int socketFD, int protocolLevel, int optionName, const void *optionValue, socklen_t optionLen), (const override));
 };
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 TEST(NetworkService_Test, NetworkService_CreateListeningSocket_CreateSocketFailure)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, CreateSocket).WillOnce(testing::Return(-1));
   EXPECT_CALL(*mockSocketPtr, Bind).Times(0);
@@ -33,7 +37,7 @@ TEST(NetworkService_Test, NetworkService_CreateListeningSocket_CreateSocketFailu
 
 TEST(NetworkService_Test, NetworkService_CreateListeningSocket_BindSocketFailure)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, CreateSocket).WillOnce(testing::Return(1));
   EXPECT_CALL(*mockSocketPtr, Bind).WillOnce(testing::Return(-1));
@@ -47,7 +51,7 @@ TEST(NetworkService_Test, NetworkService_CreateListeningSocket_BindSocketFailure
 
 TEST(NetworkService_Test, NetworkService_CreateListeningSocket_ListenSocketFailure)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, CreateSocket).WillOnce(testing::Return(1));
   EXPECT_CALL(*mockSocketPtr, Bind).WillOnce(testing::Return(1));
@@ -61,7 +65,7 @@ TEST(NetworkService_Test, NetworkService_CreateListeningSocket_ListenSocketFailu
 
 TEST(NetworkService_Test, NetworkService_CreateListeningSocket_ListenSocketSuccess)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, CreateSocket).WillOnce(testing::Return(1));
   EXPECT_CALL(*mockSocketPtr, Bind).WillOnce(testing::Return(1));
@@ -73,9 +77,13 @@ TEST(NetworkService_Test, NetworkService_CreateListeningSocket_ListenSocketSucce
   EXPECT_EQ(s.CreateListeningSocket(0U, 1), 1);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 TEST(NetworkService_Test, NetworkService_Accept_Failure)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, Accept).WillOnce(testing::Return(-1));
 
@@ -86,7 +94,7 @@ TEST(NetworkService_Test, NetworkService_Accept_Failure)
 
 TEST(NetworkService_Test, NetworkService_Accept_Success)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, Accept).WillOnce(testing::Return(1));
 
@@ -97,7 +105,7 @@ TEST(NetworkService_Test, NetworkService_Accept_Success)
 
 TEST(NetworkService_Test, NetworkService_Accept_InvalidArgs_Failure)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, Accept).Times(0);
 
@@ -106,9 +114,13 @@ TEST(NetworkService_Test, NetworkService_Accept_InvalidArgs_Failure)
   EXPECT_EQ(s.Accept(-1), -1);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 TEST(NetworkService_Test, NetworkService_ReadNextBytes_InvalidSocketArgs_Failure)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, Read).Times(0);
 
@@ -121,7 +133,7 @@ TEST(NetworkService_Test, NetworkService_ReadNextBytes_InvalidSocketArgs_Failure
 
 TEST(NetworkService_Test, NetworkService_ReadNextBytes_ClearInParamStringResult)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, Read).WillOnce(testing::Return(0));
 
@@ -133,9 +145,13 @@ TEST(NetworkService_Test, NetworkService_ReadNextBytes_ClearInParamStringResult)
   EXPECT_EQ(result.size(), 0);
 }
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 TEST(NetworkService_Test, NetworkService_Write_InvalidSocketArgs_Failure)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, Write).Times(0);
 
@@ -146,7 +162,7 @@ TEST(NetworkService_Test, NetworkService_Write_InvalidSocketArgs_Failure)
 
 TEST(NetworkService_Test, NetworkService_Write_InvalidEmptyStrArgs_Failure)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, Write).Times(0);
 
@@ -157,7 +173,7 @@ TEST(NetworkService_Test, NetworkService_Write_InvalidEmptyStrArgs_Failure)
 
 TEST(NetworkService_Test, NetworkService_Write_Success)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   const std::string msg("msg");
 
@@ -168,9 +184,13 @@ TEST(NetworkService_Test, NetworkService_Write_Success)
   EXPECT_EQ(s.Write(1, msg), msg.size());
 }
 
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
 TEST(NetworkService_Test, NetworkService_SetupConnectionTimeout_InvalidSocketArgs_Failure)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, SetOption).Times(0);
 
@@ -181,7 +201,7 @@ TEST(NetworkService_Test, NetworkService_SetupConnectionTimeout_InvalidSocketArg
 
 TEST(NetworkService_Test, NetworkService_SetupConnectionTimeout_InvalidTimeoutArgs_Failure)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, SetOption).Times(0);
 
@@ -193,7 +213,7 @@ TEST(NetworkService_Test, NetworkService_SetupConnectionTimeout_InvalidTimeoutAr
 
 TEST(NetworkService_Test, NetworkService_SetupConnectionTimeout_SetOption_Failure)
 {
-  MockLinuxSocketInterface *mockSocketPtr = new MockLinuxSocketInterface();
+  MockSocketInterface *mockSocketPtr = new MockSocketInterface();
 
   EXPECT_CALL(*mockSocketPtr, SetOption).WillOnce(testing::Return(-1));
 

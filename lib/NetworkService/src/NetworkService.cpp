@@ -64,6 +64,7 @@ int NetworkService::Accept(int listenSocketFileDescriptor) const
 int NetworkService::Close(int socketFileDescriptor) const
 {
   int res = m_socketInterface->Close(socketFileDescriptor);
+  
   if (res < 0)
     DEBUG_LOG_ERROR("SocketInterface: ERROR reading: %s\n", std::strerror(errno));
   
@@ -77,7 +78,7 @@ ssize_t NetworkService::ReadNextBytes(int socketFileDescriptor, std::string &out
 
   out_strResult.clear();
 
-  constexpr size_t readBuffSize = 8;
+  constexpr size_t readBuffSize = 256;
   char buffer[readBuffSize]{};
 
   ssize_t charsReadCount = m_socketInterface->Read(socketFileDescriptor, buffer, readBuffSize);

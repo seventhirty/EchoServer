@@ -72,9 +72,7 @@ bool ClientConnectionHandler::ProcessReceivedBytes(const std::string &bytes, std
 bool ClientConnectionHandler::ProcessClientMessage(const std::string &msg)
 {
   if (IsClientMessageInfoRequest(msg))
-  {
     return WriteInfoMessageToClient();
-  }
 
   ++m_messagesReceivedCount;
 
@@ -89,10 +87,9 @@ bool ClientConnectionHandler::IsClientMessageInfoRequest(const std::string &msg)
 bool ClientConnectionHandler::ReadNextBytesFromClient(std::string &out_Msg) const
 {
   auto readResult = m_readCallback(m_socketID, out_Msg);
+  
   if (readResult == 0)
-  {
     DEBUG_LOG("ClientConnectionHandler: Client disconnected.\n");
-  }
 
   return readResult > 0;
 }

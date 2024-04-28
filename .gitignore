@@ -3,9 +3,6 @@ build/
 **/.vscode/
 personal/
 
-notes.txt
-
-
 *.ii
 *.s
 
