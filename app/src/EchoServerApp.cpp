@@ -21,7 +21,7 @@ int EchoServerApp::Run(int argc, char *argv[]) const
   }
   catch (const std::exception &e)
   {
-    DEBUG_LOG_ERROR("Exception thrown: %s", e.what());
+    DEBUG_LOG_ERROR("Exception thrown: %s\n", e.what());
     result = EXIT_FAILURE;
   }
 
@@ -42,7 +42,7 @@ int EchoServerApp::ResolvePort(int argc, char *argv[]) const
     }
     catch(const std::exception& e)
     {
-      DEBUG_LOG_ERROR("Error parsing provided port argument");
+      DEBUG_LOG_ERROR("Error parsing provided port argument. Will use default one.\n");
     }
   }
 

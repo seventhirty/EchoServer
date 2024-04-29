@@ -1,6 +1,6 @@
 #pragma once
 
-#include <mutex>
+#include <atomic>
 #include <memory>
 
 #include "NetworkService/NetworkService.hpp"
@@ -12,7 +12,7 @@ public:
   explicit EchoServer(std::unique_ptr<ISocketInterface> socketInterface);
 
   int Run(int port);
-  int GetActiveConnectionsCount();
+  inline int GetActiveConnectionsCount();
 
 private:
   EchoServer(const EchoServer &) = delete;
@@ -23,10 +23,18 @@ private:
   void AcceptNextClientConnection(int listenSocketFD);
   void HandleClientConnection(int clientConnectionSocketFD);
 
-  void UpdateActiveConnectionsCount(int delta);
+  inline void UpdateActiveConnectionsCount(int delta);
 
-  //std::unique_ptr<NetworkService> m_networkService;
   NetworkService m_networkService;
-  int m_activeConnectionsCount;
-  std::mutex m_activeConnectionsCountMutex;
+  std::atomic_int m_activeConnectionsCount;
 };
+
+int EchoServer::GetActiveConnectionsCount()
+{
+  return m_activeConnectionsCount;
+}
+
+void EchoServer::UpdateActiveConnectionsCount(int delta)
+{
+  m_activeConnectionsCount += delta;
+}

@@ -28,7 +28,8 @@ int EchoServer::InitListeningSocket(int port) const
 int EchoServer::Run(int port)
 {
   DEBUG_LOG("EchoServer starting..\n");
-
+  DEBUG_LOG("Port is: %d\n", port);
+  
   auto listenSocketFD = InitListeningSocket(port);
 
   if (listenSocketFD < 0)
@@ -87,16 +88,4 @@ void EchoServer::HandleClientConnection(int clientConnectionSocketFD)
 
   DEBUG_LOG("EchoServer: Client disconnected. Closing socket %d\n", clientConnectionSocketFD);
   m_networkService.Close(clientConnectionSocketFD);
-}
-
-int EchoServer::GetActiveConnectionsCount()
-{
-  std::lock_guard<std::mutex> lock(m_activeConnectionsCountMutex);
-  return m_activeConnectionsCount;
-}
-
-void EchoServer::UpdateActiveConnectionsCount(int delta)
-{
-  std::lock_guard<std::mutex> lock(m_activeConnectionsCountMutex);
-  m_activeConnectionsCount += delta;
 }

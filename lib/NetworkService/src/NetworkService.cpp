@@ -56,7 +56,7 @@ int NetworkService::Accept(int listenSocketFileDescriptor) const
                                                  &clilen);
 
   if (clientSocketFD < 0)
-    DEBUG_LOG_ERROR("SocketInterface: ERROR on accept: %s", std::strerror(errno));
+    DEBUG_LOG_ERROR("SocketInterface: ERROR on accept: %s\n", std::strerror(errno));
 
   return clientSocketFD;
 }
