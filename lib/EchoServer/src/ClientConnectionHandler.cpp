@@ -47,7 +47,7 @@ bool ClientConnectionHandler::ProcessReceivedBytes(const std::string &bytes, std
     {
       // newline found in current sequence,
       // append and clear any leftovers from previous calls, and process the full message
-      std::string fullMessage(unprocessedLeftoverBytes);
+      std::string fullMessage(std::move(unprocessedLeftoverBytes));
       unprocessedLeftoverBytes.clear();
 
       fullMessage.append(nextLineStart, ++newLineIter);
