@@ -6,7 +6,6 @@
 #include "NetworkService/NetworkService.hpp"
 #include "NetworkService/SocketInterface.hpp"
 #include "EchoServer/EchoServerConfig.hpp"
-#include "EchoServer/ClientConnectionHandler.hpp"
 
 EchoServer::EchoServer(std::unique_ptr<ISocketInterface> socketInterface)
   : m_networkService(std::move(socketInterface))
@@ -35,11 +34,8 @@ int EchoServer::Run(int port)
   if (listenSocketFD < 0)
     return EXIT_FAILURE;
 
-  // TODO (avelkov): end loop condition isRunning and a way to stop server (and free port on kill)
   while (true)
     AcceptNextClientConnection(listenSocketFD);
-
-  DEBUG_LOG("EchoServer closing listening socket..\n");
 
   return (m_networkService.Close(listenSocketFD) >= 0 ? EXIT_SUCCESS : EXIT_FAILURE);
 }
@@ -51,41 +47,40 @@ void EchoServer::AcceptNextClientConnection(int listenSocketFD)
   if (clientConnectionSocketFD < 0)
     return;
 
+  if (m_networkService.SetupConnectionTimeout(clientConnectionSocketFD, CFG_ECHO_SERVER_TIMEOUT_SECONDS) < 0)
+    return;
+
   DEBUG_LOG("EchoServer: Client connected. Socket ID: %d\n", clientConnectionSocketFD);
 
-  m_networkService.SetupConnectionTimeout(clientConnectionSocketFD, CFG_ECHO_SERVER_TIMEOUT_SECONDS);
-
-  // TODO : handle lifetime issues (error on close, open sockets in timeout upon kill)
-  // intercept system signals, make threads check if it's time to finish?
   std::thread clientThread(&EchoServer::HandleClientConnection, this, clientConnectionSocketFD);
   clientThread.detach();
 }
 
 void EchoServer::HandleClientConnection(int clientConnectionSocketFD)
 {
-  auto getActiveConnectionsCountCallback = [this]() { return GetActiveConnectionsCount(); };
-
-  auto readNextBytesCallback =
-    [this](int socketFileDescriptor, std::string &out_strResult)
-    {
-      return m_networkService.ReadNextBytes(socketFileDescriptor, out_strResult);
-    };
-
-  auto writeCallback = 
-    [this](int socketFileDescriptor, const std::string &str)
-    { 
-      return m_networkService.Write(socketFileDescriptor, str); 
-    };
-
-  ClientConnectionHandler newConnection(clientConnectionSocketFD,
-                                        getActiveConnectionsCountCallback,
-                                        readNextBytesCallback,
-                                        writeCallback);
+  ClientConnection clientConnection = CreateClientConnection(clientConnectionSocketFD);
 
   UpdateActiveConnectionsCount(1);
-  newConnection.HandleClientConnection();
+  clientConnection.HandleClientConnection();
   UpdateActiveConnectionsCount(-1);
-
-  DEBUG_LOG("EchoServer: Client disconnected. Closing socket %d\n", clientConnectionSocketFD);
   m_networkService.Close(clientConnectionSocketFD);
+  DEBUG_LOG("EchoServer: Closing socket %d\n", clientConnectionSocketFD);
+}
+
+ClientConnection EchoServer::CreateClientConnection(int clientConnectionSocketFD)
+{
+  auto getActiveConnectionsCountCallback = [this]() { return GetActiveConnectionsCount(); };
+  auto readNextBytesCallback = [this](int socketFileDescriptor, std::string &out_strResult)
+  {
+    return m_networkService.ReadNextBytes(socketFileDescriptor, out_strResult);
+  };
+  auto writeCallback = [this](int socketFileDescriptor, const std::string &str)
+  { 
+    return m_networkService.Write(socketFileDescriptor, str); 
+  };
+
+  return ClientConnection{clientConnectionSocketFD,
+                          getActiveConnectionsCountCallback,
+                          readNextBytesCallback,
+                          writeCallback};
 }

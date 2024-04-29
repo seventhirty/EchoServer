@@ -1,8 +1,10 @@
 project(EchoServer)
 
 add_library(EchoServer SHARED
-    src/ClientConnectionHandler.cpp
+    src/StrUtils.cpp
+    src/ClientConnection.cpp
     src/EchoServer.cpp
+    src/MessageDataProcessor.cpp
 )
 
 set(CC_COMMON_COMPILE_OPTIONS "-Wall" "-Wextra" "-Wpedantic")

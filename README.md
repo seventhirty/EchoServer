@@ -94,7 +94,7 @@ TODO
 
 * Don't use a separate thread per client connection (does not scale well)
 
-* Refactor ClientConnectionHandler and EchoServer iceberg classes to be more easily testable and write unit tests
+* Refactor ClientConnection and EchoServer iceberg classes to be more easily testable and write unit tests
 * Move tests into each project's corresponding test folder
 
 * After a certain amount of messages (unsigned long max), msg sent counter overflows and goes back to 0 

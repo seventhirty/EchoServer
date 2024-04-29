@@ -14,15 +14,6 @@ target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
 ################################################################################
 
-add_executable(StringFormatUtils_test StringFormatUtils_test.cpp)
-target_link_libraries(StringFormatUtils_test
- PRIVATE
-  GTest::GTest
-  Core)
-add_test(StringFormatUtils_gtest StringFormatUtils_test)
-
-################################################################################
-
 add_executable(NetworkService_test NetworkService_test.cpp)
 target_link_libraries(NetworkService_test
  PRIVATE
@@ -39,3 +30,5 @@ target_link_libraries(EchoServer_test
   EchoServer
   NetworkService)
 add_test(EchoServer_gtest EchoServer_test)
+
+################################################################################

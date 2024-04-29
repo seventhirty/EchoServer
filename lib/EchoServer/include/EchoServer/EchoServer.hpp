@@ -5,6 +5,7 @@
 
 #include "NetworkService/NetworkService.hpp"
 #include "NetworkService/ISocketInterface.hpp"
+#include "EchoServer/ClientConnection.hpp"
 
 class EchoServer
 {
@@ -20,6 +21,7 @@ private:
 
   int InitListeningSocket(int port) const;
   void AcceptNextClientConnection(int listenSocketFD);
+  ClientConnection CreateClientConnection(int clientConnectionSocketFD);
   void HandleClientConnection(int clientConnectionSocketFD);
   void UpdateActiveConnectionsCount(int delta);
 
