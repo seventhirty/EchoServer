@@ -11,14 +11,14 @@ class EchoServer
 public:
   explicit EchoServer(std::unique_ptr<ISocketInterface> socketInterface);
 
-  int Run();
+  int Run(int port);
   int GetActiveConnectionsCount();
 
 private:
   EchoServer(const EchoServer &) = delete;
   EchoServer &operator=(const EchoServer &) = delete;
 
-  int InitListeningSocket() const;
+  int InitListeningSocket(int port) const;
 
   void AcceptNextClientConnection(int listenSocketFD);
   void HandleClientConnection(int clientConnectionSocketFD);

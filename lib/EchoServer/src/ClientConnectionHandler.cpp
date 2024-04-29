@@ -75,7 +75,6 @@ bool ClientConnectionHandler::ProcessClientMessage(const std::string &msg)
     return WriteInfoMessageToClient();
 
   ++m_messagesReceivedCount;
-
   return WriteEchoMessageToClient(msg);
 }
 

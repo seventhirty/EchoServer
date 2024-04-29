@@ -28,5 +28,5 @@ TEST(EchoServer_Test, EchoServer_Run_Error_InitListeningSocket)
   EchoServer s{std::move(std::unique_ptr<ISocketInterface>(socketInterfacePtr))};
 
   EXPECT_EQ(s.GetActiveConnectionsCount(), 0);
-  EXPECT_EQ(s.Run(), EXIT_FAILURE);
+  EXPECT_EQ(s.Run(1), EXIT_FAILURE);
 }

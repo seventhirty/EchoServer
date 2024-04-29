@@ -9,24 +9,24 @@ sudo apt install build-essential
 sudo apt install cmake
 ```
 
-Building Debug from the root dir:
+Building Debug from the root project dir:
 ```
 cmake -S . -B build/debug/ -D CMAKE_BUILD_TYPE=Debug
 cmake --build build/debug/
 ```
 
-Running Debug tests from the root dir:
+Running Debug tests from the root project dir:
 ```
 ctest --test-dir build/debug
 ```
 
-Building Release from the root dir:
+Building Release from the root project dir:
 ```
 cmake -S . -B build/release/ -D CMAKE_BUILD_TYPE=Release
 cmake --build build/release/
 ```
 
-Running Release tests from the root dir:
+Running Release tests from the root project dir:
 ```
 ctest --test-dir build/release
 ```
@@ -35,9 +35,23 @@ ctest --test-dir build/release
 Usage
 ------------------------------------------------------------------------
 
-* See EchoServerConfig.hpp for the port (currently it's: 50026)
+* Start by providing port or not.
+* If no port is provided, default port is used
+  (see CFG_ECHO_SERVER_DEFAULT_PORT in EchoServerConfig.hpp).
+
+* Examples for running from the root project dir:
+```
+./build/debug/app/EchoServerApp
+./build/release/app/EchoServerApp 50000
+```
+
 * Connect to the server using a TCP client program, for example - telnet
-* Anything sent from clients that starts with '>' is considered an info request
+```
+telnet localhost 50001
+telnet 192.168.0.189 50000
+```
+
+* Any lines sent from clients that start with '>' are considered as "info requests"
 
 ------------------------------------------------------------------------
 Requirements Specification Questions:

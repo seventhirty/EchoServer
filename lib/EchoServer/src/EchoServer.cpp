@@ -14,10 +14,10 @@ EchoServer::EchoServer(std::unique_ptr<ISocketInterface> socketInterface)
 {
 }
 
-int EchoServer::InitListeningSocket() const
+int EchoServer::InitListeningSocket(int port) const
 {
   DEBUG_LOG("EchoServer initializing listening socket..\n");
-  auto listenSocketFD = m_networkService.CreateListeningSocket(CFG_ECHO_SERVER_PORT, CFG_ECHO_SERVER_MAX_PENDING_CLIENT_CONNECTIONS_IN);
+  auto listenSocketFD = m_networkService.CreateListeningSocket(port, CFG_ECHO_SERVER_MAX_PENDING_CLIENT_CONNECTIONS_IN);
 
   if (listenSocketFD > 0)
     DEBUG_LOG("EchoServer successfully initialized listening socket..\n");
@@ -25,11 +25,11 @@ int EchoServer::InitListeningSocket() const
   return listenSocketFD;
 }
 
-int EchoServer::Run()
+int EchoServer::Run(int port)
 {
   DEBUG_LOG("EchoServer starting..\n");
 
-  auto listenSocketFD = InitListeningSocket();
+  auto listenSocketFD = InitListeningSocket(port);
 
   if (listenSocketFD < 0)
     return EXIT_FAILURE;
@@ -57,7 +57,7 @@ void EchoServer::AcceptNextClientConnection(int listenSocketFD)
   // TODO : handle lifetime issues (error on close, open sockets in timeout upon kill)
   // intercept system signals, make threads check if it's time to finish?
   std::thread clientThread(&EchoServer::HandleClientConnection, this, clientConnectionSocketFD);
-  clientThread.detach(); 
+  clientThread.detach();
 }
 
 void EchoServer::HandleClientConnection(int clientConnectionSocketFD)
