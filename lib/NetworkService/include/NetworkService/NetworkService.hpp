@@ -18,8 +18,5 @@ public:
   int SetupConnectionTimeout(int socketFileDescriptor, time_t timeoutSeconds) const;
 
 private:
-  NetworkService(const NetworkService &) = delete;
-  NetworkService &operator=(const NetworkService &) = delete;
-
   std::unique_ptr<ISocketInterface> m_socketInterface;
 };

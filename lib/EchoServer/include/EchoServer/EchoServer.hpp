@@ -16,9 +16,6 @@ public:
   int GetActiveConnectionsCount();
 
 private:
-  EchoServer(const EchoServer &) = delete;
-  EchoServer &operator=(const EchoServer &) = delete;
-
   int InitListeningSocket(int port) const;
   void AcceptNextClientConnection(int listenSocketFD);
   ClientConnection CreateClientConnection(int clientConnectionSocketFD);

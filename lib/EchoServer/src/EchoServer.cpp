@@ -48,7 +48,11 @@ void EchoServer::AcceptNextClientConnection(int listenSocketFD)
     return;
 
   if (m_networkService.SetupConnectionTimeout(clientConnectionSocketFD, CFG_ECHO_SERVER_TIMEOUT_SECONDS) < 0)
+  {
+    DEBUG_LOG_ERROR("EchoServer: Error on setup connection timeout. Closing socket %d\n", clientConnectionSocketFD);
+    m_networkService.Close(clientConnectionSocketFD);
     return;
+  }
 
   DEBUG_LOG("EchoServer: Client connected. Socket ID: %d\n", clientConnectionSocketFD);
 

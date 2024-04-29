@@ -43,3 +43,13 @@ target_link_libraries(EchoServer_test
 add_test(EchoServer_gtest EchoServer_test)
 
 ################################################################################
+
+add_executable(MessageDataProcessor_test lib/EchoServer/MessageDataProcessor_test.cpp)
+
+target_link_libraries(MessageDataProcessor_test
+ PRIVATE
+  gtest_main 
+  gmock_main
+  EchoServer)
+
+add_test(MessageDataProcessor_gtest MessageDataProcessor_test)
