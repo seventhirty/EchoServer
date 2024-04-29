@@ -8,10 +8,7 @@ int main()
   int result = EXIT_SUCCESS;
   try
   {
-    auto socketInterfacePtr{std::make_unique<SocketInterface>()};
-    auto networkServicePtr{std::make_unique<NetworkService>(std::move(socketInterfacePtr))};
-    EchoServer server{std::move(networkServicePtr)};
-
+    EchoServer server{std::move(std::make_unique<SocketInterface>())};
     result = server.Run();
   }
   catch (const std::exception &e)

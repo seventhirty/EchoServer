@@ -1,21 +1,21 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
-#include "NetworkService/INetworkService.hpp"
 #include "NetworkService/ISocketInterface.hpp"
 
-class NetworkService : public INetworkService
+class NetworkService
 {
 public:
   explicit NetworkService(std::unique_ptr<ISocketInterface> socketInterface);
 
-  int CreateListeningSocket(uint16_t portID, int maxPendingConnectionsInQueue) const override;
-  int Accept(int listenSocketFileDescriptor) const override;
-  int Close(int socketFileDescriptor) const override;
-  ssize_t ReadNextBytes(int socketFileDescriptor, std::string &out_strResult) const override;
-  ssize_t Write(int socketFileDescriptor, const std::string &str) const override;
-  int SetupConnectionTimeout(int socketFileDescriptor, time_t timeoutSeconds) const override;
+  int CreateListeningSocket(uint16_t portID, int maxPendingConnectionsInQueue) const;
+  int Accept(int listenSocketFileDescriptor) const;
+  int Close(int socketFileDescriptor) const;
+  ssize_t ReadNextBytes(int socketFileDescriptor, std::string &out_strResult) const;
+  ssize_t Write(int socketFileDescriptor, const std::string &str) const;
+  int SetupConnectionTimeout(int socketFileDescriptor, time_t timeoutSeconds) const;
 
 private:
   NetworkService(const NetworkService &) = delete;
