@@ -9,26 +9,37 @@ FetchContent_Declare(
 )
 
 FetchContent_MakeAvailable(googletest)
+
 add_library(GTest::GTest INTERFACE IMPORTED)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
 ################################################################################
 
-add_executable(NetworkService_test NetworkService_test.cpp)
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
+
+################################################################################
+
+add_executable(NetworkService_test lib/NetworkService/NetworkService_test.cpp)
+
 target_link_libraries(NetworkService_test
  PRIVATE
-  gtest_main gmock_main
+  gtest_main 
+  gmock_main
   NetworkService)
+
 add_test(NetworkService_gtest NetworkService_test)
 
 ################################################################################
 
-add_executable(EchoServer_test EchoServer_test.cpp)
+add_executable(EchoServer_test lib/EchoServer/EchoServer_test.cpp)
+
 target_link_libraries(EchoServer_test
  PRIVATE
-  gtest_main gmock_main
-  EchoServer
-  NetworkService)
+  gtest_main 
+  gmock_main
+  NetworkService
+  EchoServer)
+
 add_test(EchoServer_gtest EchoServer_test)
 
 ################################################################################
