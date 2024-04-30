@@ -1,7 +1,7 @@
-#include "EchoServer/StrUtils.hpp"
+#include "EchoServer/EchoServerStrUtils.hpp"
 #include "EchoServer/EchoServerConfig.hpp"
 
-namespace StrUtils
+namespace EchoServerStrUtils
 {
   std::string FormatInfoStr(int connectionsCount, unsigned long messagesCount)
   {

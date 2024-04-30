@@ -3,7 +3,7 @@
 #include <string>
 #include <functional>
 
-#include "EchoServer/StrUtils.hpp"
+#include "EchoServer/EchoServerStrUtils.hpp"
 #include "EchoServer/EchoServerConfig.hpp"
 #include "EchoServer/MessageDataProcessor.hpp"
 
@@ -40,7 +40,7 @@ private:
 
 inline bool ClientConnection::WriteInfoMessageToClient() const
 {
-  return m_writeCallback(m_socketID, StrUtils::FormatInfoStr( 
+  return m_writeCallback(m_socketID, EchoServerStrUtils::FormatInfoStr( 
     m_activeConnectionsCountGetterCallback(), 
     m_messagesReceivedCount)) >= 0;
 }

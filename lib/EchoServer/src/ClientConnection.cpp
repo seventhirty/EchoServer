@@ -41,7 +41,7 @@ bool ClientConnection::ReadNextBytesFromClient(std::string &out_Msg) const
 
 bool ClientConnection::ProcessClientMessage(const std::string &msg)
 {
-  if (StrUtils::IsClientMessageInfoRequest(msg))
+  if (EchoServerStrUtils::IsClientMessageInfoRequest(msg))
     return WriteInfoMessageToClient();
 
   ++m_messagesReceivedCount;

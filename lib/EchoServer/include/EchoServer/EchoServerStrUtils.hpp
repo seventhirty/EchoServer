@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace StrUtils
+namespace EchoServerStrUtils
 {
   std::string FormatInfoStr(int connectionsCount,unsigned long messagesCount);
   bool IsClientMessageInfoRequest(const std::string &msg);

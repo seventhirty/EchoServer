@@ -36,8 +36,7 @@ Usage
 ------------------------------------------------------------------------
 
 * Start by providing port or not.
-* If no port is provided, default port is used
-  (see CFG_ECHO_SERVER_DEFAULT_PORT in EchoServerConfig.hpp).
+* If no port is provided, default port (51337) is used
 
 * Examples for running from the root project dir:
 ```
@@ -58,7 +57,7 @@ Requirements Specification Questions:
 ------------------------------------------------------------------------
 
 * What is the build target OS and tech to be used?
-  - Currently we use C++17 and build for Ubunutu, using the sockets posix library and std threads
+  - Currently we use C++17 and build for Ubunutu, using posix sockets
 
 * Implement Client?
   - There is no client application. Tested with telnet (Ubuntu & Windows 11)
@@ -66,9 +65,6 @@ Requirements Specification Questions:
 * Implement application-level protocol?
   - Currently we do raw echoes and anything that starts with '>' is considered an info request
   
-* Implement proper server config (cmd args, cfg file, env vars..)? 
-  - All the config settings are hard-coded currently (including port) in a single hearder file.
-
 * Should we count the info command as a message
   - Info request (anything that starts with '>') is not counted as a message
 
@@ -85,8 +81,6 @@ Requirements Specification Questions:
 TODO
 ------------------------------------------------------------------------
 
-* Implement proper shutdown - handle signals and release thread resources, close sockets
-
 * There is a hard-coded timeout period - clients are disconnected if idle for
   CFG_ECHO_SERVER_TIMEOUT_SECONDS seconds. 
   Active sessions counter for timed-out sessions is updated with a latency equal
@@ -94,8 +88,6 @@ TODO
 
 * Don't use a separate thread per client connection (does not scale well)
 
-* Refactor ClientConnection and EchoServer iceberg classes to be more easily testable and write unit tests
-* Move tests into each project's corresponding test folder
+* Implement proper shutdown - handle signals and release thread resources, close sockets
 
 * After a certain amount of messages (unsigned long max), msg sent counter overflows and goes back to 0 
-* Use exceptions to make code more readable?

@@ -1,7 +1,7 @@
 project(EchoServer)
 
 add_library(EchoServer SHARED
-    src/StrUtils.cpp
+    src/EchoServerStrUtils.cpp
     src/ClientConnection.cpp
     src/EchoServer.cpp
     src/MessageDataProcessor.cpp
