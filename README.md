@@ -74,9 +74,6 @@ Requirements Specification Questions:
 * What encoding should be supported?
   - Currently it's ANSI only
 
-* Should IPv6 be supported?
-  - Currently it's not supported
-
 ------------------------------------------------------------------------
 TODO
 ------------------------------------------------------------------------

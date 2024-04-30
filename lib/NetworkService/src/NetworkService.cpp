@@ -13,18 +13,36 @@ NetworkService::NetworkService(std::unique_ptr<ISocketInterface> socketInterface
 
 int NetworkService::CreateListeningSocket(uint16_t portID, int maxPendingConnectionsInQueue) const
 {
-  int socketFD = m_socketInterface->CreateSocket(AF_INET, SOCK_STREAM, 0);
+  int socketFD = m_socketInterface->CreateSocket(AF_INET6, SOCK_STREAM, 0);
   if (socketFD < 0)
   {
     DEBUG_LOG_ERROR("SocketInterface: ERROR opening listening socket: %s\n", std::strerror(errno));
     return -1;
   }
 
-  sockaddr_in servAddr{};
+  int reuseAddressOption = 1;
+  if (m_socketInterface->SetOption(socketFD, SOL_SOCKET, SO_REUSEADDR,
+                                   &reuseAddressOption, sizeof(reuseAddressOption)) < 0)
+  {
+    DEBUG_LOG_ERROR("SocketInterface: ERROR setting socket reusable option: %s\n", std::strerror(errno));
+    m_socketInterface->Close(socketFD);
+    return -1;
+  }
 
-  servAddr.sin_family = AF_INET;
-  servAddr.sin_addr.s_addr = INADDR_ANY;
-  servAddr.sin_port = htons(portID);
+  int ipv6OnlyOption = 0;
+  if (m_socketInterface->SetOption(socketFD, IPPROTO_IPV6, IPV6_V6ONLY,
+                                   &ipv6OnlyOption, sizeof(ipv6OnlyOption)) < 0)
+  {
+    DEBUG_LOG_ERROR("SocketInterface: ERROR setting ipv6 only option: %s\n", std::strerror(errno));
+    m_socketInterface->Close(socketFD);
+    return -1;
+  }
+
+  sockaddr_in6 servAddr{};
+
+  servAddr.sin6_family = AF_INET6;
+  servAddr.sin6_addr = in6addr_any;
+  servAddr.sin6_port = htons(portID);
 
   if (m_socketInterface->Bind(socketFD, reinterpret_cast<sockaddr *>(&servAddr), sizeof(servAddr)) < 0)
   {
@@ -48,12 +66,12 @@ int NetworkService::Accept(int listenSocketFileDescriptor) const
   if (listenSocketFileDescriptor < 0)
     return -1;
 
-  sockaddr_in cli_addr{};
-  socklen_t clilen = sizeof(cli_addr);
+  sockaddr_in6 clientAddr{};
+  socklen_t clientAddrSz = sizeof(clientAddr);
 
   int clientSocketFD = m_socketInterface->Accept(listenSocketFileDescriptor,
-                                                 reinterpret_cast<sockaddr *>(&cli_addr),
-                                                 &clilen);
+                                                 reinterpret_cast<sockaddr *>(&clientAddr),
+                                                 &clientAddrSz);
 
   if (clientSocketFD < 0)
     DEBUG_LOG_ERROR("SocketInterface: ERROR on accept: %s\n", std::strerror(errno));
