@@ -84,7 +84,11 @@ TODO
   Active sessions counter is updated with a latency equal
   to this timeout period in the worst case, if clients don't properly close the connection. 
 
-* Don't use a separate thread per client connection (does not scale well)
+* Using a separate thread per client connection with a single server process does not scale well.
+  - Look into using a thread pool with std::thread::hardware_concurrency threads
+  - Look into: http://www.kegel.com/c10k.html
+  - Look into: https://highscalability.com/the-secret-to-10-million-concurrent-connections-the-kernel-i/
+
 
 * Implement proper shutdown - handle signals and release thread resources, close sockets
 
