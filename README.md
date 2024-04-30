@@ -48,6 +48,7 @@ Usage
 ```
 telnet localhost 50001
 telnet 192.168.0.189 50000
+telnet ::1 51337
 ```
 
 * Any lines sent from clients that start with '>' are considered as "info requests"
@@ -80,8 +81,8 @@ TODO
 
 * There is a hard-coded timeout period - clients are disconnected if idle for
   CFG_ECHO_SERVER_TIMEOUT_SECONDS seconds. 
-  Active sessions counter for timed-out sessions is updated with a latency equal
-  to this timeout period in the worst case. 
+  Active sessions counter is updated with a latency equal
+  to this timeout period in the worst case, if clients don't properly close the connection. 
 
 * Don't use a separate thread per client connection (does not scale well)
 
